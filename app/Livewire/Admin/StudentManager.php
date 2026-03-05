@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Student;
 use App\Models\Graduation;
 use App\Imports\StudentsImport;
+use App\Exports\StudentsExport;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -129,6 +130,17 @@ class StudentManager extends Component
 
         $this->file = null;
         $this->resetPage();
+    }
+
+    public function exportExcel(string $type = 'xlsx')
+    {
+        $extension = $type === 'csv' ? 'csv' : 'xlsx';
+        $filename = 'data-siswa-' . now()->format('Y-m-d-His') . '.' . $extension;
+
+        return Excel::download(
+            new StudentsExport($this->search, $this->filterStatus),
+            $filename
+        );
     }
 
     public function deleteAll(): void

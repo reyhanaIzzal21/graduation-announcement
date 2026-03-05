@@ -302,7 +302,7 @@
         <table>
             <tr>
                 @if ($logo_path)
-                    <td style="padding-right: 15px;">
+                    <td style="padding-right: 5px;">
                         <img src="{{ public_path('storage/' . $logo_path) }}" alt="Logo" class="logo">
                     </td>
                 @endif

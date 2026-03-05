@@ -21,7 +21,7 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
     public function model(array $row)
     {
         // Normalize status
-        $statusRaw = strtolower(trim($row['status'] ?? 'lulus'));
+        $statusRaw = strtolower(trim($row['status'] ?? 'tidak_lulus'));
         $status = in_array($statusRaw, ['lulus', 'ya', 'yes', 'y', '1']) ? 'lulus' : 'tidak_lulus';
 
         // Parse birth date - support multiple formats

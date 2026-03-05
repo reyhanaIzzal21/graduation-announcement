@@ -5,6 +5,12 @@
             <flux:text class="mt-1">Kelola data siswa dan status kelulusan</flux:text>
         </div>
         <div class="flex gap-2">
+            <flux:button wire:click="exportExcel('xlsx')" variant="filled" icon="arrow-down-tray">
+                Export Excel
+            </flux:button>
+            {{-- <flux:button wire:click="exportExcel('csv')" variant="ghost" icon="arrow-down-tray">
+                Export CSV
+            </flux:button> --}}
             <flux:button wire:click="openAddModal" variant="primary" icon="plus">
                 Tambah Siswa
             </flux:button>
@@ -26,9 +32,9 @@
             <flux:heading size="lg">Import Data Excel/CSV</flux:heading>
         </div>
         <flux:text class="mb-4 text-sm">
-            Format kolom: <strong>NISN, NIS, Nama, Tanggal Lahir, Kelas, Status, Nilai</strong>
+            Format kolom: <strong>NISN, NIS, Nama, Tanggal Lahir, Kelas</strong>
             <br>Header harus menggunakan: <code class="text-xs bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">nisn,
-                nis, nama, tanggal_lahir, kelas, status, nilai</code>
+                nis, nama, tanggal_lahir, kelas</code>
         </flux:text>
         <form wire:submit="importExcel" class="flex flex-col gap-4 sm:flex-row sm:items-end">
             <div class="flex-1">
