@@ -3,140 +3,153 @@
 
 <head>
     @include('partials.head')
+    {{-- Import Font Khusus untuk kesan Akademik --}}
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 25%, #312e81 50%, #1e1b4b 75%, #0f172a 100%);
+        :root {
+            --smaza-blue: #1A4B99;
+            --smaza-gold: #FFD700;
+            --bg-deep: #0A192F;
+            /* Deep Navy Professional */
         }
 
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+        }
+
+        .academic-gradient {
+            background: radial-gradient(circle at top center, #1E3A8A 0%, #0A192F 70%);
+        }
+
+        /* Glassmorphism Standard Industri - Lebih Soft & Clean */
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
+        /* Tekstur Subtle agar tidak terlihat 'kosong' seperti desain AI */
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-20px);
-            }
+        .font-serif-academic {
+            font-family: 'Playfair Display', serif;
         }
 
-        .animate-glow {
-            animation: glow 2s ease-in-out infinite alternate;
+        /* Custom Scrollbar untuk vibe premium */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
 
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-            }
-
-            to {
-                box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
-            }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-deep);
         }
 
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(99, 102, 241, 0.3);
-            animation: particle-float 8s ease-in-out infinite;
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 10px;
         }
 
-        @keyframes particle-float {
-
-            0%,
-            100% {
-                transform: translateY(0) translateX(0);
-                opacity: 0.3;
-            }
-
-            25% {
-                transform: translateY(-30px) translateX(20px);
-                opacity: 0.6;
-            }
-
-            50% {
-                transform: translateY(-10px) translateX(-10px);
-                opacity: 0.4;
-            }
-
-            75% {
-                transform: translateY(-40px) translateX(15px);
-                opacity: 0.5;
-            }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
         }
     </style>
 </head>
 
-<body class="min-h-screen gradient-bg text-white antialiased overflow-x-hidden">
-    {{-- Floating Particles --}}
-    <div class="fixed inset-0 pointer-events-none overflow-hidden">
-        <div class="particle w-2 h-2 top-[10%] left-[20%]" style="animation-delay: 0s;"></div>
-        <div class="particle w-3 h-3 top-[30%] left-[80%]" style="animation-delay: 2s;"></div>
-        <div class="particle w-1.5 h-1.5 top-[60%] left-[10%]" style="animation-delay: 4s;"></div>
-        <div class="particle w-2.5 h-2.5 top-[80%] left-[70%]" style="animation-delay: 1s;"></div>
-        <div class="particle w-2 h-2 top-[20%] left-[50%]" style="animation-delay: 3s;"></div>
-        <div class="particle w-1 h-1 top-[50%] left-[40%]" style="animation-delay: 5s;"></div>
-        <div class="particle w-3 h-3 top-[70%] left-[90%]" style="animation-delay: 2.5s;"></div>
+<body class="min-h-screen text-slate-200 antialiased overflow-x-hidden academic-gradient">
+    {{-- Overlay Tekstur --}}
+    <div class="fixed inset-0 pointer-events-none bg-grid-pattern z-0"></div>
+
+    {{-- Aksen Cahaya (Ambient Light) --}}
+    <div
+        class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none">
+    </div>
+    <div
+        class="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-yellow-600/5 blur-[120px] rounded-full pointer-events-none">
     </div>
 
-    {{-- Header --}}
-    <header class="relative z-10 border-b border-white/10">
-        <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    @php $logo = \App\Models\Setting::get('logo_path'); @endphp
-                    @if ($logo)
-                        <img src="{{ asset('storage/' . $logo) }}" alt="Logo"
-                            class="h-10 w-10 rounded-lg object-contain bg-white/10 p-1">
-                    @else
-                        <div
-                            class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/20 text-indigo-400">
-                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 14l9-5-9-5-9 5 9 5z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                            </svg>
+    {{-- Layout Wrapper --}}
+    <div class="relative z-10 flex flex-col min-h-screen">
+
+        {{-- Navigation / Header --}}
+        <nav class="border-b border-white/5 bg-[#0A192F]/50 backdrop-blur-md sticky top-0 z-50">
+            <div class="mx-auto max-w-7xl px-6 py-4">
+                <div class="flex items-center justify-between">
+                    {{-- Branding --}}
+                    <div class="flex items-center gap-4">
+                        @php $logo = \App\Models\Setting::get('logo_path'); @endphp
+                        <div class="relative group">
+                            <div
+                                class="absolute -inset-1 bg-blue-500 rounded-lg blur opacity-20 group-hover:opacity-40 transition">
+                            </div>
+                            @if ($logo)
+                                <img src="{{ asset('storage/' . $logo) }}" alt="Logo SMAZA"
+                                    class="relative h-11 w-11 object-contain">
+                            @else
+                                <div
+                                    class="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-lg">
+                                    <span class="font-bold text-lg">S</span>
+                                </div>
+                            @endif
                         </div>
-                    @endif
-                    <div>
-                        <h1 class="text-lg font-bold text-white">SIKAS</h1>
-                        <p class="text-xs text-indigo-300">
-                            {{ \App\Models\Setting::get('school_name', 'Sistem Informasi Kelulusan') }}</p>
+
+                        <div class="hidden sm:block">
+                            <h2 class="text-base font-extrabold tracking-tighter text-white leading-none">SIKAS <span
+                                    class="text-blue-500 font-light">SMAZA</span></h2>
+                            <p class="text-[10px] uppercase tracking-[0.2em] text-slate-500 font-semibold mt-1">
+                                {{ \App\Models\Setting::get('school_name', 'SMAN 1 Ponorogo') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- Right Side Actions --}}
+                    <div class="flex items-center gap-6">
+                        {{-- <a href="{{ route('login') }}"
+                            class="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-all">
+                            <span
+                                class="h-[1px] w-4 bg-slate-700 group-hover:w-8 group-hover:bg-blue-500 transition-all"></span>
+                            Admin Access
+                        </a> --}}
                     </div>
                 </div>
-                <a href="{{ route('login') }}" class="text-sm text-white/60 hover:text-white transition-colors">
-                    Admin Login
-                </a>
             </div>
-        </div>
-    </header>
+        </nav>
 
-    {{-- Main Content --}}
-    <main class="relative z-10">
-        {{ $slot }}
-    </main>
+        {{-- Main Content Slot --}}
+        <main class="flex-grow flex flex-col">
+            {{ $slot }}
+        </main>
 
-    {{-- Footer --}}
-    <footer class="relative z-10 border-t border-white/10 py-6 mt-12">
-        <div class="mx-auto max-w-7xl px-4 text-center">
-            <p class="text-sm text-white/40">
-                &copy; {{ date('Y') }} SIKAS -
-                {{ \App\Models\Setting::get('school_name', 'Sistem Informasi Kelulusan SMK') }}
-            </p>
-        </div>
-    </footer>
+        {{-- Footer --}}
+        <footer class="border-t border-white/5 py-10 mt-auto bg-[#070F1D]">
+            <div class="mx-auto max-w-7xl px-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="text-center md:text-left">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-600 mb-1">Official
+                            Graduation Portal</p>
+                        <p class="text-sm text-slate-500">
+                            &copy; {{ date('Y') }} <span class="text-slate-400 font-semibold">SIKAS</span> —
+                            {{ \App\Models\Setting::get('school_name', 'Sistem Informasi Kelulusan') }}
+                        </p>
+                    </div>
+
+                    {{-- Social/Link - Standar Industri biasanya ada link bantuan --}}
+                    <div class="flex items-center gap-4 text-xs font-medium text-slate-600">
+                        <a href="#" class="hover:text-blue-400 transition-colors">Bantuan</a>
+                        <span class="w-1 h-1 rounded-full bg-slate-800"></span>
+                        <a href="#" class="hover:text-blue-400 transition-colors">Panduan Kelulusan</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     @fluxScripts
 </body>

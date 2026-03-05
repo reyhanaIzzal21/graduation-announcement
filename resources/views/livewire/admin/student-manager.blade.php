@@ -87,7 +87,7 @@
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">
                             Status</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                            Nilai</th>
+                            Rata-rata</th>
                         <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">
                             Token</th>
                         <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -121,11 +121,13 @@
                                 @endif
                             </td>
                             <td class="whitespace-nowrap px-4 py-3 text-sm text-zinc-500">
-                                {{ $student->graduation?->gpa ?? '-' }}</td>
+                                {{ $student->graduation?->final_score ?? '-' }}</td>
                             <td class="whitespace-nowrap px-4 py-3 text-sm font-mono text-zinc-500">
                                 {{ $student->graduation?->token ?? '-' }}</td>
                             <td class="whitespace-nowrap px-4 py-3 text-right">
                                 <div class="flex items-center justify-end gap-1">
+                                    <flux:button href="{{ route('admin.grades', $student->id) }}" variant="ghost"
+                                        size="xs" icon="academic-cap" wire:navigate />
                                     <flux:button wire:click="editStudent({{ $student->id }})" variant="ghost"
                                         size="xs" icon="pencil" />
                                     <flux:button wire:click="deleteStudent({{ $student->id }})"
@@ -200,23 +202,6 @@
                             <flux:label>Kelas</flux:label>
                             <flux:input wire:model="formClassName" placeholder="XII RPL 1" />
                             @error('formClassName')
-                                <flux:text class="text-red-500 text-xs">{{ $message }}</flux:text>
-                            @enderror
-                        </flux:field>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <flux:field>
-                            <flux:label>Status</flux:label>
-                            <flux:select wire:model="formStatus">
-                                <option value="lulus">Lulus</option>
-                                <option value="tidak_lulus">Tidak Lulus</option>
-                            </flux:select>
-                        </flux:field>
-                        <flux:field>
-                            <flux:label>Nilai / GPA</flux:label>
-                            <flux:input type="number" wire:model="formGpa" step="0.01" placeholder="85.50" />
-                            @error('formGpa')
                                 <flux:text class="text-red-500 text-xs">{{ $message }}</flux:text>
                             @enderror
                         </flux:field>

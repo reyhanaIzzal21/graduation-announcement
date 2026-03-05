@@ -27,6 +27,21 @@
             margin-bottom: 30px;
         }
 
+        .header-page-2 {
+            border-bottom: 3px double #000;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header-page-2 table {
+            border-collapse: collapse;
+        }
+
+        .header-page-2 table td {
+            vertical-align: middle;
+            padding: 0;
+        }
+
         .header-content {
             display: flex;
             align-items: center;
@@ -40,11 +55,27 @@
             float: left;
         }
 
+        .header-page-2 .logo {
+            width: 80px;
+            height: 80px;
+        }
+
         .header .school-name {
             font-size: 16pt;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-page-2 .school-name {
+            font-size: 16pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            padding: 0;
         }
 
         .header .school-detail {
@@ -93,6 +124,37 @@
         .student-table td:nth-child(2) {
             width: 15px;
             text-align: center;
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .grades-table th,
+        .grades-table td {
+            border: 1px solid #000;
+            padding: 5px 10px;
+            text-align: left;
+        }
+
+        .grades-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .grades-table td.center {
+            text-align: center;
+        }
+
+        .grades-table td.right {
+            text-align: right;
+        }
+
+        .grades-table tfoot td {
+            font-weight: bold;
         }
 
         .footer {
@@ -197,11 +259,11 @@
                 <td>:</td>
                 <td>{{ $student->class_name }}</td>
             </tr>
-            @if ($graduation->gpa)
+            @if ($graduation->final_score)
                 <tr>
                     <td>Nilai Rata-rata</td>
                     <td>:</td>
-                    <td>{{ number_format($graduation->gpa, 2) }}</td>
+                    <td>{{ number_format($graduation->final_score, 2) }}</td>
                 </tr>
             @endif
         </table>
@@ -231,6 +293,55 @@
             @endif
         </div>
     </div>
+
+    <br>
+
+    {{-- page 2 --}}
+    {{-- header --}}
+    <div class="header-page-2">
+        <table>
+            <tr>
+                @if ($logo_path)
+                    <td style="padding-right: 15px;">
+                        <img src="{{ public_path('storage/' . $logo_path) }}" alt="Logo" class="logo">
+                    </td>
+                @endif
+                <td>
+                    <div class="school-name">{{ $school_name }}</div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {{-- Per-subject Grades Table --}}
+    @if ($grades->count() > 0)
+        <p>Dengan perolehan nilai sebagai berikut:</p>
+
+        <table class="grades-table">
+            <thead>
+                <tr>
+                    <th style="width: 40px;">No</th>
+                    <th>Mata Pelajaran</th>
+                    <th style="width: 80px;">Nilai</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($grades as $i => $grade)
+                    <tr>
+                        <td class="center">{{ $i + 1 }}</td>
+                        <td>{{ $grade->subject->name }}</td>
+                        <td class="center">{{ number_format($grade->score, 2) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="right">Rata-rata</td>
+                    <td class="center">{{ number_format($graduation->final_score, 2) }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    @endif
 
     {{-- Token Verification --}}
     <div class="token-box">

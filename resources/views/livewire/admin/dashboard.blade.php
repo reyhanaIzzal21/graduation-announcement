@@ -69,6 +69,22 @@
             </div>
             <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-amber-500/5"></div>
         </div>
+
+        {{-- Mata Pelajaran --}}
+        <div
+            class="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
+            <div class="flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10">
+                    <flux:icon name="book-open" class="size-6 text-purple-500" />
+                </div>
+                <div>
+                    <flux:text class="text-sm font-medium text-zinc-500">Mata Pelajaran</flux:text>
+                    <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                        {{ number_format($totalSubjects) }}</div>
+                </div>
+            </div>
+            <div class="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-purple-500/5"></div>
+        </div>
     </div>
 
     {{-- Additional Info --}}

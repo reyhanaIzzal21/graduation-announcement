@@ -23,6 +23,10 @@
                     :current="request()->routeIs('admin.students')" wire:navigate>
                     {{ __('Data Siswa') }}
                 </flux:sidebar.item>
+                <flux:sidebar.item icon="book-open" :href="route('admin.subjects')"
+                    :current="request()->routeIs('admin.subjects')" wire:navigate>
+                    {{ __('Mata Pelajaran') }}
+                </flux:sidebar.item>
                 <flux:sidebar.item icon="cog-6-tooth" :href="route('admin.settings')"
                     :current="request()->routeIs('admin.settings')" wire:navigate>
                     {{ __('Pengaturan') }}

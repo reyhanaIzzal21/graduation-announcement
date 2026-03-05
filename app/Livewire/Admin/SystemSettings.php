@@ -65,8 +65,11 @@ class SystemSettings extends Component
         Setting::set('congratulation_message', $this->congratulation_message);
         Setting::set('condolence_message', $this->condolence_message);
 
-        // Combine date and time
-        $dateTime = $this->announcement_date . ' ' . $this->announcement_time . ':00';
+        // Combine date and time, explicitly in WIB timezone
+        $dateTime = \Carbon\Carbon::parse(
+            $this->announcement_date . ' ' . $this->announcement_time . ':00',
+            'Asia/Jakarta'
+        )->format('Y-m-d H:i:s');
         Setting::set('announcement_date', $dateTime);
 
         // Handle logo upload

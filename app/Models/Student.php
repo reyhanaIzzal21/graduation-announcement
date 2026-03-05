@@ -28,8 +28,22 @@ class Student extends Model
         return $this->hasOne(Graduation::class);
     }
 
+    public function grades(): HasMany
+    {
+        return $this->hasMany(Grade::class);
+    }
+
     public function accessLogs(): HasMany
     {
         return $this->hasMany(AccessLog::class);
+    }
+
+    /**
+     * Calculate average score from all grades.
+     */
+    public function averageScore(): ?float
+    {
+        $avg = $this->grades()->avg('score');
+        return $avg ? round($avg, 2) : null;
     }
 }

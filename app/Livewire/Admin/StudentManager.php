@@ -25,8 +25,6 @@ class StudentManager extends Component
     public string $formName = '';
     public string $formBirthDate = '';
     public string $formClassName = '';
-    public string $formStatus = 'lulus';
-    public ?string $formGpa = null;
     public ?int $editingStudentId = null;
 
     // Import result
@@ -45,8 +43,6 @@ class StudentManager extends Component
             'formName' => 'required|min:2',
             'formBirthDate' => 'required|date',
             'formClassName' => 'required',
-            'formStatus' => 'required|in:lulus,tidak_lulus',
-            'formGpa' => 'nullable|numeric|min:0|max:100',
         ];
     }
 
@@ -68,21 +64,21 @@ class StudentManager extends Component
 
     public function editStudent(int $id): void
     {
-        $student = Student::with('graduation')->findOrFail($id);
+        $student = Student::findOrFail($id);
         $this->editingStudentId = $student->id;
         $this->formNisn = $student->nisn;
         $this->formNis = $student->nis ?? '';
         $this->formName = $student->name;
         $this->formBirthDate = $student->birth_date->format('Y-m-d');
         $this->formClassName = $student->class_name;
-        $this->formStatus = $student->graduation?->status ?? 'lulus';
-        $this->formGpa = $student->graduation?->gpa;
         $this->showAddModal = true;
     }
 
     public function saveStudent(): void
     {
         $this->validate();
+
+        $isNew = !$this->editingStudentId;
 
         $student = Student::updateOrCreate(
             ['id' => $this->editingStudentId],
@@ -95,13 +91,13 @@ class StudentManager extends Component
             ]
         );
 
-        Graduation::updateOrCreate(
-            ['student_id' => $student->id],
-            [
-                'status' => $this->formStatus,
-                'gpa' => $this->formGpa,
-            ]
-        );
+        // Create graduation record if new student (without score yet)
+        if ($isNew) {
+            Graduation::firstOrCreate(
+                ['student_id' => $student->id],
+                ['status' => 'tidak_lulus']
+            );
+        }
 
         $this->showAddModal = false;
         $this->resetForm();
@@ -150,8 +146,6 @@ class StudentManager extends Component
         $this->formName = '';
         $this->formBirthDate = '';
         $this->formClassName = '';
-        $this->formStatus = 'lulus';
-        $this->formGpa = null;
         $this->resetValidation();
     }
 

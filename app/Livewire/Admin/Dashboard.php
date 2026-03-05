@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\Graduation;
 use App\Models\AccessLog;
 use App\Models\Setting;
@@ -15,6 +16,7 @@ class Dashboard extends Component
     public int $totalNotGraduated = 0;
     public float $graduationPercentage = 0;
     public int $totalAccessLogs = 0;
+    public int $totalSubjects = 0;
     public ?string $announcementDate = null;
 
     public function mount(): void
@@ -26,6 +28,7 @@ class Dashboard extends Component
             ? round(($this->totalGraduated / $this->totalStudents) * 100, 1)
             : 0;
         $this->totalAccessLogs = AccessLog::count();
+        $this->totalSubjects = Subject::count();
         $this->announcementDate = Setting::get('announcement_date');
     }
 

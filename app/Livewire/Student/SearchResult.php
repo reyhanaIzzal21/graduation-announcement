@@ -34,11 +34,17 @@ class SearchResult extends Component
 
     private function checkAnnouncementTime(): void
     {
-        $this->announcementDate = Setting::get('announcement_date');
-        if ($this->announcementDate) {
-            $this->isAnnouncementTime = Carbon::parse($this->announcementDate)->isPast();
+        $rawDate = Setting::get('announcement_date');
+        if ($rawDate) {
+            // Parse the announcement date explicitly in WIB (Asia/Jakarta) timezone
+            $announcementDt = Carbon::parse($rawDate, 'Asia/Jakarta');
+            $nowWib = Carbon::now('Asia/Jakarta');
+            $this->isAnnouncementTime = $nowWib->gte($announcementDt);
+            // Send ISO 8601 format with timezone offset so JS can parse correctly
+            $this->announcementDate = $announcementDt->toIso8601String();
         } else {
             $this->isAnnouncementTime = false;
+            $this->announcementDate = null;
         }
     }
 
@@ -74,8 +80,8 @@ class SearchResult extends Component
             return;
         }
 
-        // Find student
-        $student = Student::with('graduation')
+        // Find student with grades
+        $student = Student::with(['graduation', 'grades.subject'])
             ->where('nisn', $this->nisn)
             ->whereDate('birth_date', $this->birth_date)
             ->first();
@@ -99,6 +105,14 @@ class SearchResult extends Component
         // Prepare student data for display
         $hashids = new \Hashids\Hashids(config('app.key'), 10);
 
+        // Prepare grades data
+        $gradesData = $student->grades->map(function ($grade) {
+            return [
+                'subject' => $grade->subject->name,
+                'score' => $grade->score,
+            ];
+        })->sortBy('subject')->values()->toArray();
+
         $this->studentData = [
             'id' => $student->id,
             'name' => $student->name,
@@ -107,8 +121,9 @@ class SearchResult extends Component
             'class_name' => $student->class_name,
             'birth_date' => $student->birth_date->format('d F Y'),
             'status' => $student->graduation?->status ?? 'tidak_lulus',
-            'gpa' => $student->graduation?->gpa,
+            'final_score' => $student->graduation?->final_score,
             'token' => $student->graduation?->token,
+            'grades' => $gradesData,
             'download_hash' => $hashids->encode($student->id),
             'message' => $student->graduation?->status === 'lulus'
                 ? Setting::get('congratulation_message', 'Selamat! Anda dinyatakan LULUS.')

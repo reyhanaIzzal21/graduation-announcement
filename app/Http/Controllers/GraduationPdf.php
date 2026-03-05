@@ -20,7 +20,7 @@ class GraduationPdf extends Controller
         }
 
         $studentId = $decoded[0];
-        $student = Student::with('graduation')->findOrFail($studentId);
+        $student = Student::with(['graduation', 'grades.subject'])->findOrFail($studentId);
 
         // Only allow download for graduated students
         if (!$student->graduation || $student->graduation->status !== 'lulus') {
@@ -30,6 +30,7 @@ class GraduationPdf extends Controller
         $data = [
             'student' => $student,
             'graduation' => $student->graduation,
+            'grades' => $student->grades->sortBy(fn($g) => $g->subject->name),
             'school_name' => Setting::get('school_name', 'Sekolah'),
             'school_npsn' => Setting::get('school_npsn', ''),
             'school_address' => Setting::get('school_address', ''),

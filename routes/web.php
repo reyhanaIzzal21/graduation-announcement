@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GraduationPdf;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\StudentManager;
+use App\Livewire\Admin\SubjectManager;
+use App\Livewire\Admin\GradeManager;
 use App\Livewire\Admin\SystemSettings;
 use App\Livewire\Admin\AccessLogViewer;
 use App\Livewire\Student\SearchResult;
@@ -17,6 +19,8 @@ Route::get('download/{hash}', [GraduationPdf::class, 'download'])->name('graduat
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('dashboard', Dashboard::class)->name('admin.dashboard');
     Route::get('students', StudentManager::class)->name('admin.students');
+    Route::get('students/{student}/grades', GradeManager::class)->name('admin.grades');
+    Route::get('subjects', SubjectManager::class)->name('admin.subjects');
     Route::get('settings', SystemSettings::class)->name('admin.settings');
     Route::get('logs', AccessLogViewer::class)->name('admin.logs');
 });

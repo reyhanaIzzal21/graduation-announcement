@@ -1,136 +1,206 @@
 <x-layouts::guest :title="__('SIKAS - Pengumuman Kelulusan')">
-    <div class="mx-auto max-w-4xl px-4 py-12 sm:py-20">
-        {{-- Hero Section --}}
-        <div class="text-center mb-16">
-            <div class="mb-8 animate-float">
-                <div
-                    class="inline-flex h-24 w-24 items-center justify-center rounded-2xl bg-indigo-500/20 border border-indigo-500/30">
-                    <svg class="h-12 w-12 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M12 14l9-5-9-5-9 5 9 5z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                    </svg>
+    <style>
+        /* Custom Colors based on SMAZA Logo */
+        :root {
+            --smaza-blue: #1A4B99;
+            --smaza-red: #E31E24;
+            --smaza-gold: #FFD700;
+        }
+
+        .bg-smaza-blue {
+            background-color: var(--smaza-blue);
+        }
+
+        .text-smaza-gold {
+            color: var(--smaza-gold);
+        }
+
+        .border-smaza-gold {
+            border-color: var(--smaza-gold);
+        }
+
+        /* Typography Elevation */
+        .font-serif-academic {
+            font-family: 'Playfair Display', serif;
+            /* Pastikan load font ini di layout utama */
+        }
+
+        /* Subtle Pattern */
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/00/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+
+    <div class="relative min-h-screen bg-[#0A192F] bg-pattern overflow-hidden">
+        {{-- Decorative Elements --}}
+        <div
+            class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-blue-600/10 to-transparent pointer-events-none">
+        </div>
+
+        <div class="relative mx-auto max-w-5xl px-6 py-16 sm:py-24">
+
+            {{-- Header/Logo Section --}}
+            <div class="flex flex-col items-center text-center mb-12">
+                <div class="relative mb-6 group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-yellow-600 to-yellow-300 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000">
+                    </div>
+                    <img src="{{ asset('assets/logo-smaza.png') }}" alt="Logo SMAZA"
+                        class="relative h-32 w-auto drop-shadow-2xl">
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-smaza-gold font-medium tracking-[0.2em] uppercase text-sm">Sistem Informasi
+                        Kelulusan Sekolah</span>
+                    <h1 class="text-4xl font-extrabold text-white sm:text-6xl tracking-tight leading-tight">
+                        GERBANG KELULUSAN<br>
+                        <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-300">
+                            ANGKATAN {{ date('Y') }}
+                        </span>
+                    </h1>
+                    <p class="text-lg text-slate-400 font-medium tracking-wide">
+                        {{ \App\Models\Setting::get('school_name', 'SMAN 1 Ponorogo') }}
+                    </p>
                 </div>
             </div>
-
-            <h1 class="text-4xl font-bold text-white sm:text-6xl mb-4 tracking-tight">
-                Pengumuman<br>
-                <span class="bg-linear-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    Kelulusan {{ date('Y') }}
-                </span>
-            </h1>
-
-            <p class="mx-auto max-w-2xl text-lg text-white/60 mb-8">
-                {{ \App\Models\Setting::get('school_name', 'SMK Negeri 1') }}
-            </p>
 
             @php
                 $announcementDate = \App\Models\Setting::get('announcement_date');
                 $isOpen = $announcementDate ? \Carbon\Carbon::parse($announcementDate)->isPast() : false;
             @endphp
 
-            @if ($isOpen)
-                {{-- CTA Button --}}
-                <a href="{{ route('student.search') }}"
-                    class="inline-flex items-center gap-3 rounded-2xl bg-indigo-600 px-8 py-4 text-lg font-semibold text-white transition-all hover:bg-indigo-500 hover:scale-105 active:scale-95 animate-glow"
-                    wire:navigate>
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    Cek Kelulusan Sekarang
-                </a>
-                <p class="mt-4 text-sm text-white/40">Masukkan NISN dan Tanggal Lahir untuk mengecek status kelulusan
-                </p>
-            @else
-                {{-- Countdown --}}
-                @if ($announcementDate)
-                    <div class="glass-card rounded-2xl p-8 max-w-xl mx-auto mb-8">
-                        <div class="flex items-center justify-center gap-2 mb-6">
-                            <div class="h-2 w-2 rounded-full bg-amber-400 animate-pulse"></div>
-                            <span class="text-sm font-medium text-amber-300">Pembukaan Pengumuman</span>
-                        </div>
+            {{-- Main Action Area --}}
+            <div class="max-w-2xl mx-auto mb-20 text-center">
+                @if ($isOpen)
+                    <div class="p-[1px] rounded-3xl bg-gradient-to-b from-white/20 to-transparent shadow-2xl">
+                        <div class="bg-[#112240]/80 backdrop-blur-xl rounded-3xl p-8 sm:p-12 border border-white/5">
+                            <h2 class="text-white text-xl font-semibold mb-2 text-center italic">"Hari yang dinanti
+                                telah tiba."</h2>
+                            <p class="text-slate-400 mb-8 text-center">Silahkan klik tombol di bawah untuk melihat hasil
+                                perjuangan Anda.</p>
 
-                        <div x-data="countdown('{{ $announcementDate }}')" x-init="start()">
-                            <div class="flex justify-center gap-3 sm:gap-5 mb-6">
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-2xl bg-white/10 text-3xl sm:text-4xl font-bold text-white border border-white/10">
-                                        <span x-text="days">00</span>
-                                    </div>
-                                    <span class="mt-2 text-xs text-white/40 uppercase tracking-wider">Hari</span>
+                            <a href="{{ route('student.search') }}"
+                                class="group relative inline-flex items-center justify-center w-full sm:w-auto px-10 py-4 font-bold text-white transition-all duration-200 bg-sma-blue rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 overflow-hidden"
+                                style="background-color: var(--smaza-blue)" wire:navigate>
+                                <div
+                                    class="absolute inset-0 w-full h-full transition-all duration-300 transform translate-x-full group-hover:translate-x-0 bg-white/10 ease">
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-2xl bg-white/10 text-3xl sm:text-4xl font-bold text-white border border-white/10">
-                                        <span x-text="hours">00</span>
+                                <span class="relative flex items-center gap-2">
+                                    CEK HASIL SEKARANG
+                                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                    </svg>
+                                </span>
+                            </a>
+                            <p class="mt-6 text-xs text-slate-500 uppercase tracking-widest leading-relaxed">Persiapkan
+                                NISN dan Tanggal Lahir Anda</p>
+                        </div>
+                    </div>
+                @else
+                    {{-- Premium Countdown --}}
+                    @if ($announcementDate)
+                        <div x-data="countdown('{{ $announcementDate }}')" x-init="start()" class="space-y-8">
+                            <div
+                                class="inline-flex items-center px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-bold tracking-widest uppercase">
+                                <span class="relative flex h-2 w-2 mr-3">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                                </span>
+                                Menuju Pengumuman Resmi
+                            </div>
+
+                            <div class="flex justify-center gap-4 sm:gap-8">
+                                <template
+                                    x-for="(val, label) in {Hari: days, Jam: hours, Menit: minutes, Detik: seconds}"
+                                    :key="label">
+                                    <div class="flex flex-col items-center">
+                                        <div class="relative">
+                                            <div class="absolute inset-0 bg-blue-600 blur-xl opacity-20"></div>
+                                            <div
+                                                class="relative flex h-20 w-20 sm:h-28 sm:w-28 items-center justify-center rounded-2xl bg-[#112240] border border-white/10 shadow-inner">
+                                                <span
+                                                    class="text-3xl sm:text-5xl font-black text-white tracking-tighter"
+                                                    x-text="val">00</span>
+                                            </div>
+                                        </div>
+                                        <span
+                                            class="mt-3 text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-[0.3em]"
+                                            x-text="label"></span>
                                     </div>
-                                    <span class="mt-2 text-xs text-white/40 uppercase tracking-wider">Jam</span>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-2xl bg-white/10 text-3xl sm:text-4xl font-bold text-white border border-white/10">
-                                        <span x-text="minutes">00</span>
-                                    </div>
-                                    <span class="mt-2 text-xs text-white/40 uppercase tracking-wider">Menit</span>
-                                </div>
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-2xl bg-white/10 text-3xl sm:text-4xl font-bold text-indigo-400 border border-indigo-500/20">
-                                        <span x-text="seconds">00</span>
-                                    </div>
-                                    <span class="mt-2 text-xs text-white/40 uppercase tracking-wider">Detik</span>
-                                </div>
+                                </template>
+                            </div>
+
+                            <div class="bg-white/5 backdrop-blur-sm rounded-2xl py-4 px-6 inline-block">
+                                <p class="text-slate-300 font-medium flex items-center gap-3">
+                                    <svg class="w-5 h-5 text-smaza-gold" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    {{ \Carbon\Carbon::parse($announcementDate)->translatedFormat('l, d F Y | H:i') }}
+                                    WIB
+                                </p>
                             </div>
                         </div>
-
-                        <p class="text-center text-sm text-white/40">
-                            {{ \Carbon\Carbon::parse($announcementDate)->translatedFormat('l, d F Y - H:i') }} WIB
-                        </p>
-                    </div>
+                    @endif
                 @endif
-            @endif
-        </div>
-
-        {{-- Info Cards --}}
-        <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            <div class="glass-card rounded-2xl p-6 text-center transition-transform hover:scale-105">
-                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10">
-                    <svg class="h-6 w-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                </div>
-                <h3 class="text-sm font-semibold text-white mb-1">Aman & Terverifikasi</h3>
-                <p class="text-xs text-white/50">Sistem dilindungi dengan verifikasi ganda (NISN + Tanggal Lahir)</p>
             </div>
 
-            <div class="glass-card rounded-2xl p-6 text-center transition-transform hover:scale-105">
-                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10">
-                    <svg class="h-6 w-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </div>
-                <h3 class="text-sm font-semibold text-white mb-1">Unduh SKL</h3>
-                <p class="text-xs text-white/50">Surat Keterangan Lulus dapat diunduh langsung dalam format PDF</p>
+            {{-- Feature Grid - Refined --}}
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                @php
+                    $features = [
+                        [
+                            'icon' =>
+                                'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
+                            'title' => 'Sistem Terenkripsi',
+                            'desc' => 'Data nilai dan status kelulusan dilindungi enkripsi tingkat tinggi.',
+                            'color' => 'blue',
+                        ],
+                        [
+                            'icon' =>
+                                'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+                            'title' => 'E-SKL Digital',
+                            'desc' => 'Unduh Surat Keterangan Lulus resmi langsung setelah pengumuman.',
+                            'color' => 'emerald',
+                        ],
+                        [
+                            'icon' => 'M13 10V3L4 14h7v7l9-11h-7z',
+                            'title' => 'Akses Instan',
+                            'desc' => 'Server high-performance menjamin akses cepat di waktu puncak.',
+                            'color' => 'amber',
+                        ],
+                    ];
+                @endphp
+
+                @foreach ($features as $f)
+                    <div
+                        class="group p-8 rounded-3xl bg-[#112240]/40 border border-white/5 hover:border-white/20 transition-all duration-300">
+                        <div
+                            class="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-{{ $f['color'] }}-500/10 text-{{ $f['color'] }}-400 group-hover:scale-110 transition-transform">
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="{{ $f['icon'] }}" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">{{ $f['title'] }}</h3>
+                        <p class="text-sm text-slate-500 leading-relaxed">{{ $f['desc'] }}</p>
+                    </div>
+                @endforeach
             </div>
 
-            <div class="glass-card rounded-2xl p-6 text-center transition-transform hover:scale-105">
-                <div class="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10">
-                    <svg class="h-6 w-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-                <h3 class="text-sm font-semibold text-white mb-1">Real-time</h3>
-                <p class="text-xs text-white/50">Hasil pengumuman tersedia secara real-time sesuai jadwal sekolah</p>
-            </div>
+            <footer class="mt-20 text-center">
+                <p class="text-slate-600 text-xs tracking-widest uppercase">© {{ date('Y') }} SMA Negeri 1
+                    Ponorogo. All Rights Reserved.</p>
+            </footer>
         </div>
     </div>
 
-    {{-- Countdown Script --}}
+    {{-- Script tetap sama agar fitur tidak error --}}
     <script>
         function countdown(targetDate) {
             return {

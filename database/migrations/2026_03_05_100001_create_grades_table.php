@@ -8,21 +8,19 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('graduations', function (Blueprint $table) {
+        Schema::create('grades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained('students')->cascadeOnDelete();
-            $table->enum('status', ['lulus', 'tidak_lulus'])->default('lulus');
-            $table->decimal('final_score', 5, 2)->nullable();
-            $table->string('token', 10)->unique();
-            $table->string('message_id')->nullable();
+            $table->foreignId('subject_id')->constrained('subjects')->cascadeOnDelete();
+            $table->decimal('score', 5, 2);
             $table->timestamps();
 
-            $table->unique('student_id');
+            $table->unique(['student_id', 'subject_id']);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('graduations');
+        Schema::dropIfExists('grades');
     }
 };

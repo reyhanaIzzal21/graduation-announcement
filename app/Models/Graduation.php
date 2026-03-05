@@ -11,7 +11,7 @@ class Graduation extends Model
     protected $fillable = [
         'student_id',
         'status',
-        'gpa',
+        'final_score',
         'token',
         'message_id',
     ];
@@ -19,7 +19,7 @@ class Graduation extends Model
     protected function casts(): array
     {
         return [
-            'gpa' => 'decimal:2',
+            'final_score' => 'decimal:2',
         ];
     }
 

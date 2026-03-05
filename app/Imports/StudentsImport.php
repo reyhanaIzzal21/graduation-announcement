@@ -52,7 +52,7 @@ class StudentsImport implements ToModel, WithHeadingRow, WithValidation, SkipsOn
         Graduation::create([
             'student_id' => $student->id,
             'status' => $status,
-            'gpa' => $row['nilai'] ?? null,
+            'final_score' => $row['nilai'] ?? null,
         ]);
 
         $this->imported++;
